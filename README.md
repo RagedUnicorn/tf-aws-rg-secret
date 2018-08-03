@@ -42,7 +42,7 @@ A list of applications that are managed by this repository:
 
 ### Credentials
 
-Credentials can be setup in different ways. The modules within this repository either expect the credentials to be available via environment variables or supplied directly to terraform as variables.
+Credentials can be setup in different ways. The modules within this repository either expects the credentials to be available via environment variables or supplied directly to terraform as variables.
 
 ```
 export AWS_ACCESS_KEY_ID="[acceskey]"
@@ -77,13 +77,13 @@ terraform apply
 
 **Note:** Terraform will always execute `data external` because it has no knowledge about the state. This also means that every time a terraform apply is executed terraform will try to create the configured key pair. This happens even before terraform ask for execution permission. Generating a key pair is usually a one time thing and does not need to be repeated over and over again. Because of this the terraform state is not as important as it is for a whole application setup with a lot of infrastructure. It is nonetheless helpful to be able to also destroy a key with the help of terraform if it is no longer needed.
 
-Once terraform has generated the keypair its public part is upload to the AWS ec2 management console and can be inspected there. The user of this module is responsible for both storing the private key and the optional passphrase that was set on that key.
+Once terraform has generated the key pair its public part is upload to the AWS ec2 management console and can be inspected there. The user of this module is responsible for both storing the private key and the optional passphrase that was set on that key.
 
 For storage of those secrets 1Password is used. The private key should be stored as a document and the password should be separately saved as password and link to the document.
 
 Follow the following naming convention for consistency:
 
-`[rg]_[tf]_[application-name]_keypair`
+`[rg]_[tf]_[application-name]_pk`
 
 ### Creating a new Application
 
@@ -99,17 +99,17 @@ tf-aws-rg-secret/
 │   └── README.md
 ```
 
-| Name             | Description                                                                    |
-|------------------|--------------------------------------------------------------------------------|
-| main.tf          | Basic setup for terraform S3 and AWS provider and generation of the keypair(s) |
-| variables.tf     | Variables that are needed for the setup                                        |
-| output.tf        | Output of terraform after applying the configuration                           |
-| terraform.tfvars | Can be used for default values for the terraform variables.                    |
-| README.md        | Description of the application and its repository                              |
+| Name             | Description                                                                     |
+|------------------|---------------------------------------------------------------------------------|
+| main.tf          | Basic setup for terraform S3 and AWS provider and generation of the key pair(s) |
+| variables.tf     | Variables that are needed for the setup                                         |
+| output.tf        | Output of terraform after applying the configuration                            |
+| terraform.tfvars | Can be used for default values for the terraform variables.                     |
+| README.md        | Description of the application and its repository                               |
 
 ### Terraform Storing State
 
-All applications should store state inside the base RagedUnicorn s3 store. The key for the state file should starting with the application name and marked with `key` to not clash with the main application state file.
+All applications should store state inside the base RagedUnicorn S3 store. The key for the state file should starting with the application name and marked with `key` to not clash with the main application state file.
 
 ```hcl
 terraform {
@@ -121,7 +121,7 @@ terraform {
 }
 ```
 
-### Creating a Keypair
+### Creating a Key Pair
 
 Creating a key pair is done with the help of the external terraform provider. Terraform will execute the command and pass in all query parameters as JSON.
 
@@ -141,9 +141,9 @@ data "external" "generate_key_pair" {
 
 Terraform expects whatever command that was executed to return a JSON response on the standard output. This means that whatever command is executed should not log anything else to standard output. Otherwise terraform will complain about a malformed JSON structure.
 
-### Upload a Keypair to AWS
+### Upload a Key Pair to AWS
 
-Uploading the keypair is then done by extracting the public key from the response from the command. This requires the previously executed command to return a JSON that contains the public key content in a JSON key with the name `public_key`. For consistency this should be done for all key generations.
+Uploading the key pair is done by extracting the public key from the JSON response from the command. This requires the previously executed command to return a JSON output that contains the public key content in a JSON key with the name `public_key`. For consistency this should be done for all key generations.
 
 ```hcl
 resource "aws_key_pair" "load_key_pair" {
@@ -158,7 +158,7 @@ resource "aws_key_pair" "load_key_pair" {
 
 Never store keys in this repository. This repository shall never contain any secrets. It does only know how to create them but never store them.
 
-Do not use terraforms output capabilities to log secrets because terraform will write thing like that into its terraform state and might be leaked unintentionally. Setting a password on the private key is also recommended to avoid such scenarios.
+Do not use terraforms output capabilities to log secrets because terraform will write things like that into its terraform state and might leaked it unintentionally. Setting a password on the private key is also recommended to lessen the impact of such scenarios.
 
 #### Execute once
 
@@ -166,4 +166,4 @@ Usually terraform should only be run once on an application because the external
 
 #### Regenerating a Key Pair
 
-A new key pair can be generated at any point but remember that the ec2 infrastructure does not update its key just because they key changed. For this at least a restart of the instance is needed. Maybe even destroying the infrastructure first and rebuild it.
+A new key pair can be generated at any point however ec2 instances do not automatically change the key pair just because the assigned key was updated/changed. For this at least a restart of the instance is needed.
