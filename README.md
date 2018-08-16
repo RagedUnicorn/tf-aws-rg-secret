@@ -26,7 +26,7 @@ For development purpose the [tls_private_key](https://www.terraform.io/docs/prov
 
 ##### Pip dependencies
 ```
-pip install pycryptodome necessary for crypto
+pip install pycryptodome
 ```
 
 ## Applications
@@ -75,11 +75,11 @@ terraform plan
 terraform apply
 ```
 
-**Note:** Terraform will always execute `data external` because it has no knowledge about the state. This also means that every time a terraform apply is executed terraform will try to create the configured key pair. This happens even before terraform ask for execution permission. Generating a key pair is usually a one time thing and does not need to be repeated over and over again. Because of this the terraform state is not as important as it is for a whole application setup with a lot of infrastructure. It is nonetheless helpful to be able to also destroy a key with the help of terraform if it is no longer needed.
+**Note:** Terraform will always execute `data external` because it has no knowledge about the state. This also means that every time a terraform apply is executed terraform will try to create the configured key pair. This happens even before terraform asks for execution permission. Generating a key pair is usually a one time thing and does not need to be repeated over and over again. Because of this the terraform state is not as important as it is for a whole application setup with a lot of infrastructure. It is nonetheless helpful to be able to also destroy a key with the help of terraform if it is no longer needed.
 
-Once terraform has generated the key pair its public part is upload to the AWS ec2 management console and can be inspected there. The user of this module is responsible for both storing the private key and the optional passphrase that was set on that key.
+Once terraform has generated the key pair its public part is uploaded to the AWS EC2 management console and can be inspected there. The user of this module is responsible for both storing the private key and the optional passphrase that was set on that key.
 
-For storage of those secrets 1Password is used. The private key should be stored as a document and the password should be separately saved as password and link to the document.
+For storage of those secrets 1Password is used. The private key should be stored as a document and the password should be separately saved as password and linked to the document.
 
 Follow the following naming convention for consistency:
 
@@ -158,7 +158,7 @@ resource "aws_key_pair" "load_key_pair" {
 
 Never store keys in this repository. This repository shall never contain any secrets. It does only know how to create them but never store them.
 
-Do not use terraforms output capabilities to log secrets because terraform will write things like that into its terraform state and might leaked it unintentionally. Setting a password on the private key is also recommended to lessen the impact of such scenarios.
+Do not use terraforms output capabilities to log secrets because terraform will write things like that into its terraform state and might leak it unintentionally. Setting a password on the private key is also recommended to lessen the impact of such scenarios.
 
 #### Execute once
 
@@ -166,4 +166,4 @@ Usually terraform should only be run once on an application because the external
 
 #### Regenerating a Key Pair
 
-A new key pair can be generated at any point however ec2 instances do not automatically change the key pair just because the assigned key was updated/changed. For this at least a restart of the instance is needed.
+A new key pair can be generated at any point however EC2 instances do not automatically change the key pair just because the assigned key was updated/changed. For this at least a restart of the instance is needed.
