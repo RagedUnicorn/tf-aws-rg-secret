@@ -1,4 +1,4 @@
-# ragedunicorn_base
+# ragedunicorn-base
 
 > Module for ragedunicorn-base
 

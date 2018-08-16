@@ -1,4 +1,4 @@
-# wow_vanilla_server
+# wow-vanilla-server
 
 > Module for wow-vanilla-server
 
