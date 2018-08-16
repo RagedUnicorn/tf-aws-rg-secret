@@ -19,7 +19,7 @@ A module for creating key pairs.
 | application_name  | The name of the application the keypair belongs to             | string | -              | yes      |
 | environment       | The environment such as prod/int/test the keypair belongs to   | string | `test`         | no       |
 | path              | The path where the generated private and public key are stored | string | `./`           | no       |
-| key_name          | The key pair name.                                             | string | -              | yes      |
+| key_name          | The key pair name                                              | string | -              | yes      |
 | passphrase        | The passphrase for the private key                             | string | ``             | no       |
 
 ## Outputs

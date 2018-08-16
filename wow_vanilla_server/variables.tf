@@ -35,5 +35,5 @@ variable "path" {
 }
 
 variable "key_name" {
-  description = "The key pair name."
+  description = "The key pair name"
 }

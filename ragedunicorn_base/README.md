@@ -16,7 +16,7 @@ No direct links
 | application_name  | The name of the application the keypair belongs to             | string | -              | yes      |
 | aws_region        | AWS region                                                     | string | `eu-central-1` | no       |
 | environment       | The environment such as prod/int/test the keypair belongs to   | string | `test`         | no       |
-| key_name          | The key pair name.                                             | string | -              | yes      |
+| key_name          | The key pair name                                              | string | -              | yes      |
 | organization_name | The name of the organization the keypair belongs to            | string | -              | yes      |
 | passphrase        | The passphrase for the private key                             | string | ``             | no       |
 | path              | The path where the generated private and public key are stored | string | `./`           | no       |
