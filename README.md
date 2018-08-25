@@ -109,7 +109,7 @@ tf-aws-rg-secret/
 
 ### Terraform Storing State
 
-All applications should store state inside the base RagedUnicorn S3 store. The key for the state file should starting with the application name and marked with `key` to not clash with the main application state file.
+All applications should store state inside the base RagedUnicorn S3 store. The key for the state file should start with the application name and be marked with `key` to not clash with the main application state file.
 
 ```hcl
 terraform {
@@ -139,11 +139,11 @@ data "external" "generate_key_pair" {
 }
 ```
 
-Terraform expects whatever command that was executed to return a JSON response on the standard output. This means that whatever command is executed should not log anything else to standard output. Otherwise terraform will complain about a malformed JSON structure.
+Terraform expects whatever command that was executed to return a JSON response on the standard output. This means that whatever command is executed should not log anything else to the standard output. Otherwise terraform will complain about a malformed JSON structure.
 
 ### Upload a Key Pair to AWS
 
-Uploading the key pair is done by extracting the public key from the JSON response from the command. This requires the previously executed command to return a JSON output that contains the public key content in a JSON key with the name `public_key`. For consistency this should be done for all key generations.
+Uploading the key pair is done by extracting the public key from the JSON response from the command. This requires the previously executed command to return a JSON output that contains the public key content in a JSON key with the name `public_key`. For consistency this should be done the same ways for all key generations.
 
 ```hcl
 resource "aws_key_pair" "load_key_pair" {
@@ -162,8 +162,8 @@ Do not use terraforms output capabilities to log secrets because terraform will 
 
 #### Execute once
 
-Usually terraform should only be run once on an application because the external terraform provider will always rerun and generate a new key pair without asking before performing. Terraform will however ask before uploading the new key to AWS. Also the python script will never overwrite existing key pairs.
+Usually terraform should only be run once for an application because the external terraform provider will always rerun and generate a new key pair without asking before performing. Terraform will however ask before uploading the new key to AWS. Also the python script will never overwrite existing key pairs.
 
 #### Regenerating a Key Pair
 
-A new key pair can be generated at any point however EC2 instances do not automatically change the key pair just because the assigned key was updated/changed. For this at least a restart of the instance is needed.
+A new key pair can be generated at any point. EC2 instances however do not automatically change the key pair just because the assigned key was updated/changed. For this at least a restart of the instance is needed.
