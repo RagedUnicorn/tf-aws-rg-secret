@@ -37,6 +37,7 @@ A list of applications that are managed by this repository:
 |--------------------|-------------------------------------------------------------------|
 | ragedunicorn_base  | The base module for this repository                               |
 | wow_vanilla_server | A module for creating the infrastructure for a wow vanilla server |
+| wow_legion_server  | A module for creating the infrastructure for a wow legion server  |
 
 ## Setup
 
