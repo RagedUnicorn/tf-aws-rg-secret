@@ -26,7 +26,6 @@ variable "environment" {
 
 variable "passphrase" {
   description = "The passphrase for the private key"
-  default     = ""
 }
 
 variable "path" {
